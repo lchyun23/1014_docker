@@ -4,7 +4,7 @@ name: Java CI with Gradle
 on:
   push:
     branches: [ "main" ]
-#  pull_request:
+#  pull_request: -> 테스트(포매팅 관련)
 #    branches: [ "main" ]
 
 jobs:
@@ -72,11 +72,14 @@ jobs:
           timeout: 60s
           script: |
             sudo docker stop github-actions-demo
+#           컨테이너 중지
             sudo docker rm github-actions-demo
+#           이미지 제거         
             sudo docker rmi ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-demo
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-demo
+#           도커허브에서 새로 pull 받아온다.         
             sudo docker run -it -d -p 8080:8080 --name github-actions-demo ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-demo
-
+#           수행하고 멈추지 말고, 계속 굴러가도록 하는 거 : -d
       # (3) CD : Docker 컨테이너 수행 5) Remove Github IP from security group
       - name: Remove IP FROM security group
         run: |
